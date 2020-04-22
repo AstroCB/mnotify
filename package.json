@@ -1,0 +1,29 @@
+{
+  "name": "mnotify",
+  "version": "1.0.0",
+  "description": "A command line tool for receiving Messenger notifications for completed jobs",
+  "main": "mnotify.js",
+  "scripts": {
+    "test": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AstroCB/mnotify.git"
+  },
+  "keywords": [
+    "messenger",
+    "facebook",
+    "notifications",
+    "cli"
+  ],
+  "author": "Cameron Bernhardt (AstroCB)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AstroCB/mnotify/issues"
+  },
+  "homepage": "https://github.com/AstroCB/mnotify#readme",
+  "dependencies": {
+    "chalk": "^4.0.0",
+    "facebook-chat-api": "^1.8.0"
+  }
+}
