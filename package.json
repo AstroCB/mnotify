@@ -24,6 +24,7 @@
   "homepage": "https://github.com/AstroCB/mnotify#readme",
   "dependencies": {
     "chalk": "^4.0.0",
-    "facebook-chat-api": "^1.8.0"
+    "facebook-chat-api": "^1.8.0",
+    "readline-sync": "^1.4.10"
   }
 }
