@@ -1,5 +1,6 @@
 const fs = require("fs");
 const chalk = require("chalk");
+const login = require("facebook-chat-api");
 
 // Location of config directory (respects user settings)
 exports.getConfigDir = () => {
@@ -24,9 +25,27 @@ exports.loadConfig = () => {
     }
 }
 
+exports.saveConfig = config => {
+    fs.writeFile(exports.getConfigPath(), JSON.stringify(config), () => { });
+}
+
+exports.printNoConfigError = () => {
+    console.log(`${chalk.red("Unable to load config. Try running ")}${chalk.blue("mnotify --init")}${chalk.red(".")}`);
+}
+
 exports.updateLogin = (config, api) => {
     config.appState = api.getAppState();
-    fs.writeFile(exports.getConfigPath(), JSON.stringify(config), () => { });
+    exports.saveConfig(config);
+}
+
+exports.updatePassword = pass => {
+    try {
+        const config = exports.loadConfig();
+        config.password = pass;
+        exports.saveConfig(config);
+    } catch {
+        exports.printNoConfigError();
+    }
 }
 
 exports.printHeader = () => {
@@ -42,6 +61,34 @@ exports.getStdin = cb => {
             cb(chunk.toString());
         }
     });
+}
+
+exports.checkLogin = (fail, succeed) => {
+    try {
+        const config = exports.loadConfig();
+        login({ "appState": config.appState }, exports.silentOpt, (err, _) => {
+            if (err) {
+                if (config.email && config.password) {
+                    login({ "email": config.email, "password": config.password },
+                        exports.silentOpt, (err, api) => {
+                            if (err) {
+                                fail()
+                            } else {
+                                // Re-login succeeded; need to update stored session
+                                exports.updateLogin(config, api);
+                                succeed();
+                            }
+                        });
+                } else {
+                    fail();
+                }
+            } else {
+                succeed();
+            }
+        });
+    } catch {
+        fail()
+    }
 }
 
 // Stored options for common invocations

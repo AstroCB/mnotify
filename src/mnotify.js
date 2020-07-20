@@ -3,7 +3,6 @@
 // Locals
 const init = require("./init");
 const tools = require("./tools")
-const checkLogin = require("./check-login");
 
 // Stdlib
 const fs = require("fs");
@@ -17,9 +16,10 @@ const usage = require("command-line-usage");
 
 // Command-line args
 const argDefs = [
-    { "name": "help", "alias": "h", "type": Boolean, "description": "Display this help message." },
     { "name": "init", "type": Boolean, "description": "Initialize mnotify so that it can be used to send notifications." },
-    { "name": "check-login", "alias": "c", "type": Boolean, "description": "Check whether your currently-stored login information is valid." }
+    { "name": "help", "alias": "h", "type": Boolean, "description": "Display this help message." },
+    { "name": "check-login", "alias": "c", "type": Boolean, "description": "Check whether your currently-stored login information is valid." },
+    { "name": "update-password", "alias": "p", "type": String, "description": "Update your sending account's password without re-running init." }
 ];
 
 const helpSections = [
@@ -113,6 +113,7 @@ function printHelp() {
     console.log(guide);
 }
 
+// Main entry point
 if (require.main === module) {
     const options = args(argDefs);
 
@@ -121,11 +122,13 @@ if (require.main === module) {
     } else if (options.help) {
         printHelp();
     } else if (options["check-login"]) {
-        checkLogin(() => {
-            console.log(`${chalk.red("Unable to load config. Try running ")}${chalk.blue("mnotify --init")}${chalk.red(".")}`);
+        tools.checkLogin(() => {
+            tools.printNoConfigError();
         }, () => {
             console.log(chalk.green("Your current login is still valid."));
         });
+    } else if (options["update-password"]) {
+        tools.updatePassword(options["update-password"]);
     } else {
         start();
     }
