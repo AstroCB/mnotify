@@ -89,7 +89,7 @@ function storePrefs(sendEmail, sendPass, recvEmail, recvPass, shouldStore, recvA
                 fs.mkdirSync(configPath);
             }
 
-            console.log(`Login successful. Storing your session in ${chalk.yellow(tools.getConfigDir())}...`);
+            console.log(`${chalk.green("Login successful.")} Storing your session in ${chalk.yellow(tools.getConfigDir())}...`);
             fs.writeFileSync(tools.getConfigPath(), JSON.stringify(config));
             callback(null, sendApi);
         });
