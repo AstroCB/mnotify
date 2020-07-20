@@ -1,11 +1,14 @@
 #! /usr/bin/env node
 
+// Locals
+const tools = require("./tools");
+
+// Third party deps
 const fs = require("fs");
 const login = require("facebook-chat-api");
 const chalk = require("chalk");
 const rl = require("readline-sync");
 
-const tools = require("./tools");
 
 function init(callback) {
     tools.printHeader();
