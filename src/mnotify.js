@@ -31,7 +31,8 @@ const helpSections = [
             { "example": `${chalk.grey("$")} mnotify --init`, "description": `Initializes mnotify (${chalk.red("required")} before running it normally).` },
             { "example": `${chalk.grey("$")} mnotify --help`, "description": "Prints this help message." }]
     },
-    { "header": "Options", "optionList": argDefs }
+    { "header": "Options", "optionList": argDefs },
+    { "header": "Contribute", "content": "Project home: {underline https://github.com/AstroCB/mnotify}" }
 ]
 
 function start() {
