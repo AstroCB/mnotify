@@ -1,4 +1,5 @@
 const fs = require("fs");
+const chalk = require("chalk");
 
 // Location of config directory (respects user settings)
 exports.getConfigDir = () => {
@@ -12,6 +13,12 @@ exports.getConfigPath = () => {
 
 exports.configExists = () => {
     return fs.existsSync(exports.getConfigDir());
+}
+
+exports.printHeader = () => {
+    console.log(chalk.blue("======="));
+    console.log(chalk.bgBlue("mnotify"));
+    console.log(chalk.blue("======="));
 }
 
 // Stored options for common invocations

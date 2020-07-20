@@ -1,14 +1,14 @@
-const fs = require('fs');
-const login = require('facebook-chat-api');
-const chalk = require('chalk');
+#! /usr/bin/env node
+
+const fs = require("fs");
+const login = require("facebook-chat-api");
+const chalk = require("chalk");
 const rl = require("readline-sync");
 
 const tools = require("./tools");
 
 function init(callback) {
-    console.log(chalk.blue("======="));
-    console.log(chalk.bgBlue("mnotify"));
-    console.log(chalk.blue("======="));
+    tools.printHeader();
 
     console.log(`To start, we need some credentials: one for an account that \
 will send the alerts, and one for an account that will receive them (these \
@@ -105,3 +105,7 @@ function getRecvApi(sendErr, sendApi, sendEmail, recvEmail, recvPass, callback) 
 exports.init = init;
 exports.storePrefs = storePrefs;
 exports.askToStore = askToStore;
+
+if (require.main === module) {
+    init(() => { });
+}

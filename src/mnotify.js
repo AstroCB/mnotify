@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 // Locals
 const init = require("./init");
 const tools = require("./tools")
