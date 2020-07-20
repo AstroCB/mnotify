@@ -13,7 +13,10 @@ function init(callback) {
     console.log(`To start, we need some credentials: one for an account that \
 will send the alerts, and one for an account that will receive them (these \
 can be the same account, probably yours, or you can create a dummy sender \
-account). By default, these credentials will not be stored for security reasons.`);
+account).\n\nBy default, these credentials will not be stored for security \
+reasons, but the session token identifying your login will be stored at \
+${chalk.yellow(tools.getConfigDir())} (to change this, set your \
+${chalk.grey("XDG_CONFIG_HOME")}).`);
 
     const sendEmail = rl.questionEMail("Sender account email: ");
     const sendPass = rl.question("Sender account password: ", tools.passOpts);
@@ -26,7 +29,7 @@ account). By default, these credentials will not be stored for security reasons.
         storePrefs(sendEmail, sendPass, recvEmail, recvPass, shouldStore, getRecvApi, (err, _) => {
             if (err) {
                 console.log(`${chalk.red("Unable to store your information; your account credentials may be incorrect. \
-Please try running")} ${chalk.blue("mnotify init")} ${chalk.red("again.")}`);
+Please try running")} ${chalk.blue("mnotify --init")} ${chalk.red("again.")}`);
                 callback(false);
             } else {
                 console.log("Initialized and ready to go! You can now use mnotify.")

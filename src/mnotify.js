@@ -38,7 +38,7 @@ function start() {
             loginWithConfig(load_config(), input);
         } catch (e) {
             console.log(`${chalk.black.bgYellowBright.bold("WARN")} mnotify must \
-be configured before you can use it. Running ${chalk.blue("mnotify init")}...\n`);
+be configured before you can use it. Running ${chalk.blue("mnotify --init")}...\n`);
 
             init.init(success => {
                 if (!success) { return process.exit(1); }
@@ -101,7 +101,7 @@ function redoLogin(config, callback) {
     }, (err, api) => {
         if (err) {
             console.log(`${chalk.red("Failed to log in with your new information. \
-Try again by running")} ${chalk.blue("mnotify init")}${chalk.red(".")}`);
+Try again by running")} ${chalk.blue("mnotify --init")}${chalk.red(".")}`);
             process.exit(1);
         } else {
             callback(api);
