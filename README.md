@@ -31,7 +31,7 @@ Once installed, you **must** configure mnotify before using it:
 mnotify --init
 ```
 
-This will allow you to log in with the accounts required to send and receive notifications (which can be the same) and cache the resulting session to prevent you from having to log in every time. You'll also be given the option to store your account credentials to automatically retry logging in when your session expires. This is the recommended option, as it minimizes maintenance, but it's less secure since your login credentials will be stored in plaintext.
+This will allow you to log in with the accounts required to send and receive notifications (which can be the same) and cache the resulting session to prevent you from having to log in every time. You'll also be given the option to store your account credentials to automatically retry logging in when your session expires. This is the recommended option, as it minimizes maintenance, but it's less secure since your login credentials will be stored in plaintext. If you need to alter any of this information, simply run the `init` command again.
 
 This utility respects the [XDG Base Directory specification](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html), and will store all of the configuration information set at initialization in the directory specified by the `XDG_CONFIG_HOME` environment variable, if it exists. Otherwise, it will be stored in `$HOME/.config`.
 
