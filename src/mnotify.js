@@ -8,9 +8,29 @@ const tools = require("./tools")
 const fs = require("fs");
 
 // Third party deps
-const login = require('facebook-chat-api');
-const chalk = require('chalk');
+const login = require("facebook-chat-api");
+const chalk = require("chalk");
 const rl = require("readline-sync");
+const args = require("command-line-args");
+const usage = require("command-line-usage");
+
+// Command-line args
+const argDefs = [
+    { "name": "help", "alias": "h", "type": Boolean, "description": "Display this help message." },
+    { "name": "init", "type": Boolean, "description": "Initialize mnotify so that it can be used to send notifications." }
+];
+
+const helpSections = [
+    { "header": chalk.blue("mnotify"), "content": "mnotify is a simple command-line utility for sending notifications through Messenger. It takes input from stdin and sends it to a pre-configured recipient (presumably, you). It's great for sending yourself build notifications, cronjob alerts, or anything else that is worthy of a ping." },
+    { "header": "Usage", "content": `${chalk.grey("$")} ${chalk.blue("mnotify")} [<options>]` },
+    {
+        "header": "Examples", "content": [
+            { "example": `${chalk.grey("$")} echo $(date) | mnotify`, "description": "Determines the current date and notifies you." },
+            { "example": `${chalk.grey("$")} mnotify --init`, "description": `Initializes mnotify (${chalk.red("required")} before running it normally).` },
+            { "example": `${chalk.grey("$")} mnotify --help`, "description": "Prints this help message." }]
+    },
+    { "header": "Options", "optionList": argDefs }
+]
 
 function start() {
     getStdin(input => {
@@ -107,6 +127,20 @@ function notify(config, api, msg) {
     api.sendMessage(`New message from mnotify: ${msg}`, config.recipient);
 }
 
+function printHelp() {
+    const guide = usage(helpSections);
+
+    console.log(guide);
+}
+
 if (require.main === module) {
-    start();
+    const options = args(argDefs);
+
+    if (options.init) {
+        init.init(() => { });
+    } else if (options.help) {
+        printHelp();
+    } else {
+        start();
+    }
 }

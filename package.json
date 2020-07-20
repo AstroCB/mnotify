@@ -7,7 +7,9 @@
     "mnotify": "src/mnotify.js"
   },
   "scripts": {
-    "test": "echo test | src/mnotify.js",
+    "test": "echo test | mnotify",
+    "init": "mnotify --init",
+    "help": "mnotify --help",
     "postinstall": "src/postinstall.js"
   },
   "repository": {
@@ -28,6 +30,8 @@
   "homepage": "https://github.com/AstroCB/mnotify#readme",
   "dependencies": {
     "chalk": "^4.0.0",
+    "command-line-args": "^5.1.1",
+    "command-line-usage": "^6.1.0",
     "facebook-chat-api": "^1.8.0",
     "readline-sync": "^1.4.10"
   }
