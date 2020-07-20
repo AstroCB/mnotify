@@ -1,6 +1,6 @@
 {
   "name": "mnotify",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A command line tool for receiving Messenger notifications for completed jobs",
   "main": "src/mnotify.js",
   "bin": {
