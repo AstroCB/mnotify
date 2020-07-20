@@ -3,6 +3,7 @@
 // Locals
 const init = require("./init");
 const tools = require("./tools")
+const checkLogin = require("./check-login");
 
 // Stdlib
 const fs = require("fs");
@@ -17,7 +18,8 @@ const usage = require("command-line-usage");
 // Command-line args
 const argDefs = [
     { "name": "help", "alias": "h", "type": Boolean, "description": "Display this help message." },
-    { "name": "init", "type": Boolean, "description": "Initialize mnotify so that it can be used to send notifications." }
+    { "name": "init", "type": Boolean, "description": "Initialize mnotify so that it can be used to send notifications." },
+    { "name": "check-login", "alias": "c", "type": Boolean, "description": "Check whether your currently-stored login information is valid." }
 ];
 
 const helpSections = [
@@ -33,9 +35,9 @@ const helpSections = [
 ]
 
 function start() {
-    getStdin(input => {
+    tools.getStdin(input => {
         try {
-            loginWithConfig(load_config(), input);
+            loginWithConfig(tools.loadConfig(), input);
         } catch (e) {
             console.log(`${chalk.black.bgYellowBright.bold("WARN")} mnotify must \
 be configured before you can use it. Running ${chalk.blue("mnotify --init")}...\n`);
@@ -43,19 +45,10 @@ be configured before you can use it. Running ${chalk.blue("mnotify --init")}...\
             init.init(success => {
                 if (!success) { return process.exit(1); }
 
-                loginWithConfig(load_config(), input);
+                loginWithConfig(tools.loadConfig(), input);
             });
         }
     });
-}
-
-function load_config() {
-    if (tools.configExists()) {
-        const config = fs.readFileSync(tools.getConfigPath());
-        return JSON.parse(config);
-    } else {
-        throw Error("Config not found");
-    }
 }
 
 function loginWithConfig(config, msg) {
@@ -67,7 +60,8 @@ function loginWithConfig(config, msg) {
                         if (err) {
                             failedLogin(config, msg, true)
                         } else {
-                            updateLogin(config, api)
+                            // Re-login succeeded; need to update stored session
+                            tools.updateLogin(config, api)
                             notify(config, api, msg);
                         }
                     });
@@ -109,20 +103,6 @@ Try again by running")} ${chalk.blue("mnotify --init")}${chalk.red(".")}`);
     });
 }
 
-function updateLogin(config, api) {
-    config.appState = api.getAppState();
-    fs.writeFile(tools.getConfigPath(), JSON.stringify(config), () => { });
-}
-
-function getStdin(cb) {
-    process.stdin.on('readable', () => {
-        const chunk = process.stdin.read();
-        if (chunk !== null) {
-            cb(chunk.toString());
-        }
-    });
-}
-
 function notify(config, api, msg) {
     api.sendMessage(`New message from mnotify: ${msg}`, config.recipient);
 }
@@ -140,6 +120,12 @@ if (require.main === module) {
         init.init(() => { });
     } else if (options.help) {
         printHelp();
+    } else if (options["check-login"]) {
+        checkLogin(() => {
+            console.log(`${chalk.red("Unable to load config. Try running ")}${chalk.blue("mnotify --init")}${chalk.red(".")}`);
+        }, () => {
+            console.log(chalk.green("Your current login is still valid."));
+        });
     } else {
         start();
     }
