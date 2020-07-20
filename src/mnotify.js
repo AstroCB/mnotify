@@ -21,7 +21,7 @@ const argDefs = [
 ];
 
 const helpSections = [
-    { "header": chalk.blue("mnotify"), "content": "mnotify is a simple command-line utility for sending notifications through Messenger. It takes input from stdin and sends it to a pre-configured recipient (presumably, you). It's great for sending yourself build notifications, cronjob alerts, or anything else that is worthy of a ping." },
+    { "header": chalk.blue("mnotify"), "content": "mnotify is a simple command-line utility for sending notifications through Messenger. It takes input from stdin and sends it to a pre-configured recipient (presumably, you). It's great for sending yourself build notifications, cron job alerts, or anything else that is worthy of a ping." },
     { "header": "Usage", "content": `${chalk.grey("$")} ${chalk.blue("mnotify")} [<options>]` },
     {
         "header": "Examples", "content": [

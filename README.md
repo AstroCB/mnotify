@@ -9,13 +9,19 @@ It works by accepting arbitrary input from stdin, and then sending that data to 
 do_some_long_running_task && echo "Task done" | mnotify
 ```
 
-You'll receive a message when the task has finished. For a more practical use, you can receive notifications when a build is finished:
+You'll receive a message when the task has finished. For a more practical example, you can receive notifications when a build is finished:
 
 ```
 make giant_codebase | mnotify
 ```
 
 Then, you can go grab a coffee or take a walk while your build runs, and you'll get the entire log sent to your phone when it finishes (or fails 😞).
+
+Lastly, you can use mnotify to send you alerts when certain jobs run (e.g. cron jobs or service disruption events):
+
+```
+59 19 * * * ~/scripts/get-daily-covid-stats | mnotify
+```
 
 ## Installation
 
