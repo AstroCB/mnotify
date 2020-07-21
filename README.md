@@ -50,3 +50,16 @@ For more information and commands, see
 ```
 mnotify --help
 ```
+
+## Programmatic usage
+
+mnotify is primarily intended for use as a command-line utility, but it can also be used programmatically in Node.js scripts. You can easily send a notification using the `notify` function exposed from the main module:
+
+```js
+const mnotify = require("mnotify");
+if (somethingHasGoneVeryWrong) {
+    mnotify.notify("uh oh");
+}
+```
+
+This will send an alert to the pre-configured recipient from the sender's account, exactly as if triggered via CLI. If it is unable to deliver the notification due to a missing configuration file or failed login, the call to `notify` will throw, allowing you to fall back on other notification methods.

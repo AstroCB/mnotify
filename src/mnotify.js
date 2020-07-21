@@ -52,14 +52,14 @@ be configured before you can use it. Running ${chalk.blue("mnotify --init")}...\
     });
 }
 
-function loginWithConfig(config, msg) {
+function loginWithConfig(config, msg, isProgrammatic = false) {
     login({ "appState": config.appState }, tools.silentOpt, (err, api) => {
         if (err) {
             if (config.email && config.password) {
                 login({ "email": config.email, "password": config.password },
                     tools.silentOpt, (err, api) => {
                         if (err) {
-                            failedLogin(config, msg, true)
+                            failedLogin(config, msg, isProgrammatic, true)
                         } else {
                             // Re-login succeeded; need to update stored session
                             tools.updateLogin(config, api)
@@ -67,7 +67,7 @@ function loginWithConfig(config, msg) {
                         }
                     });
             } else {
-                failedLogin(config, msg)
+                failedLogin(config, msg, isProgrammatic)
             }
         } else {
             notify(config, api, msg);
@@ -75,14 +75,20 @@ function loginWithConfig(config, msg) {
     });
 }
 
-function failedLogin(config, msg, failedRetry = false) {
+function failedLogin(config, msg, isProgrammatic, failedRetry = false) {
     const retryStr = failedRetry ? " An attempt was also made to re-login with \
 your stored credentials, but this failed too (possibly due to a password change)." : "";
 
-    console.log(chalk.red(`Your cached login has expired.${retryStr} Please log into your sender account again:`));
-    redoLogin(config, newApi => {
-        notify(config, newApi, msg);
-    });
+    console.log(chalk.red(`Your cached login has expired.${retryStr}`));
+
+    if (isProgrammatic) {
+        throw new Error("Unable to notify due to failed login");
+    } else {
+        console.log(chalk.red("Please log into your sender account again:"));
+        redoLogin(config, newApi => {
+            notify(config, newApi, msg);
+        });
+    }
 }
 
 function redoLogin(config, callback) {
@@ -112,6 +118,16 @@ function printHelp() {
     const guide = usage(helpSections);
 
     console.log(guide);
+}
+
+// Export a notify function for programmatic use
+exports.notify = msg => {
+    try {
+        loginWithConfig(tools.loadConfig(), msg, true);
+    } catch {
+        tools.printNoConfigError();
+        throw new Error("Unable to notify due to missing configuration");
+    }
 }
 
 // Main entry point
