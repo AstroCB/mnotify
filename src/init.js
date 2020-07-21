@@ -117,6 +117,19 @@ exports.init = init;
 exports.storePrefs = storePrefs;
 exports.askToStore = askToStore;
 
+exports.programmaticInit = (creds, callback) => {
+    storePrefs(creds.senderEmail,
+        creds.senderPass,
+        creds.receiverEmail,
+        creds.receiverPass,
+        creds.storeSenderCredentials,
+        getRecvApi,
+        (err, _) => {
+            callback(err);
+        }
+    );
+};
+
 if (require.main === module) {
     init(() => { });
 }

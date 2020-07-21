@@ -63,3 +63,24 @@ if (somethingHasGoneVeryWrong) {
 ```
 
 This will send an alert to the pre-configured recipient from the sender's account, exactly as if triggered via CLI. If it is unable to deliver the notification due to a missing configuration file or failed login, the call to `notify` will throw, allowing you to fall back on other notification methods.
+
+As with the previous commands, you must initialize mnotify before this will work; if you've already done this via `mnotify --init`, you are good to go, but you can also do it programmatically:
+
+> ### Note
+> The code below is just an example for testing purposes; I don't recommend storing your login credentials in plaintext in any source file. In real world usage, you should store the required values below as environment variables or in some external gitignored file that won't be accidentally committed. When you call `init`, you should read in these values from the file or environment to pass as the first parameter.
+
+```js
+mnotify.init({
+    "senderEmail": "sender@example.com",
+    "senderPass": "*******",
+    "receiverEmail": "receiver@example.com",
+    "receiverPass": "*******",
+    "storeSenderCredentials": true
+}, err => {
+    if (!err) {
+        mnotify.notify("Initialized successfully!");
+    } else {
+        console.error("Failed to initialize; oof");
+    }
+});
+```

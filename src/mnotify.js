@@ -126,7 +126,7 @@ exports.notify = msg => {
         loginWithConfig(tools.loadConfig(), msg, true);
     } catch {
         tools.printNoConfigError();
-        throw new Error("Unable to notify due to missing configuration");
+        throw new Error("Unable to notify due to missing configuration; you must initialize the package using `mnotify --init` or mnotify.init");
     }
 }
 
