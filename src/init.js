@@ -19,7 +19,7 @@ can be the same account, probably yours, or you can create a dummy sender \
 account).\n\nBy default, these credentials will not be stored for security \
 reasons, but the session token identifying your login will be stored at \
 ${chalk.yellow(tools.getConfigDir())} (to change this, set your \
-${chalk.grey("XDG_CONFIG_HOME")}).`);
+${chalk.grey("XDG_CONFIG_HOME")} environment variable).`);
 
     const sendEmail = rl.questionEMail("Sender account email: ");
     const sendPass = rl.question("Sender account password: ", tools.passOpts);
@@ -74,24 +74,29 @@ function storePrefs(sendEmail, sendPass, recvEmail, recvPass, shouldStore, recvA
             const recvId = recvApi.getCurrentUserID();
             const sendSession = sendApi.getAppState();
 
-            const config = {
-                "recipient": recvId,
-                "appState": sendSession
-            }
+            recvApi.getUserInfo(recvId, (err, info) => {
+                const name = !err ? info[recvId].name : null;
+                const nameStr = name ? `Notifications will be sent to ${chalk.blue(name)}. ` : "";
 
-            if (shouldStore) {
-                config["email"] = sendEmail;
-                config["password"] = sendPass;
-            }
+                const config = {
+                    "recipient": recvId,
+                    "appState": sendSession
+                }
 
-            const configPath = tools.getConfigDir();
-            if (!fs.existsSync(configPath)) {
-                fs.mkdirSync(configPath);
-            }
+                if (shouldStore) {
+                    config["email"] = sendEmail;
+                    config["password"] = sendPass;
+                }
 
-            console.log(`${chalk.green("Login successful.")} Storing your session in ${chalk.yellow(tools.getConfigDir())}...`);
-            fs.writeFileSync(tools.getConfigPath(), JSON.stringify(config));
-            callback(null, sendApi);
+                const configPath = tools.getConfigDir();
+                if (!fs.existsSync(configPath)) {
+                    fs.mkdirSync(configPath);
+                }
+
+                console.log(`${chalk.green("Login successful.")} ${nameStr}Storing your session in ${chalk.yellow(tools.getConfigDir())}...`);
+                fs.writeFileSync(tools.getConfigPath(), JSON.stringify(config));
+                callback(null, sendApi);
+            });
         });
     });
 }
