@@ -19,7 +19,8 @@ const argDefs = [
     { "name": "init", "type": Boolean, "description": "Initialize mnotify so that it can be used to send notifications." },
     { "name": "help", "alias": "h", "type": Boolean, "description": "Display this help message." },
     { "name": "check-login", "alias": "c", "type": Boolean, "description": "Check whether your currently-stored login information is valid." },
-    { "name": "update-password", "alias": "p", "type": String, "description": "Update your sending account's password without re-running init." }
+    { "name": "update-password", "alias": "p", "type": String, "description": "Update your sending account's password without re-running init." },
+    { "name": "using-botcore", "alias": "b", "type": Boolean, "description": `Process sender account logins using BotCore ({underline https://github.com/AstroCB/BotCore}) instead of a raw username/password. You must still run ${chalk.blue("mnotify --init")} before using this command in order to configure the receiver's account.`}
 ];
 
 const helpSections = [
@@ -146,6 +147,14 @@ if (require.main === module) {
         });
     } else if (options["update-password"]) {
         tools.updatePassword(options["update-password"]);
+    } else if (options["using-botcore"]) {
+        tools.botcoreLogin(err => {
+            if (err) {
+                console.log(chalk.red(err));
+            } else {
+                start();
+            }
+        });
     } else {
         start();
     }

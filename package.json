@@ -10,6 +10,7 @@
     "test": "echo test | mnotify",
     "init": "mnotify --init",
     "help": "mnotify --help",
+    "botcore": "mnotify --using-botcore",
     "postinstall": "src/postinstall.js"
   },
   "repository": {
@@ -29,10 +30,11 @@
   },
   "homepage": "https://github.com/AstroCB/mnotify#readme",
   "dependencies": {
-    "chalk": "^4.0.0",
+    "chalk": "^4.1.0",
     "command-line-args": "^5.1.1",
     "command-line-usage": "^6.1.0",
     "facebook-chat-api": "^1.8.0",
+    "messenger-botcore": "^2.2.0",
     "readline-sync": "^1.4.10"
   }
 }

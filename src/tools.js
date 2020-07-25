@@ -1,6 +1,7 @@
 const fs = require("fs");
 const chalk = require("chalk");
 const login = require("facebook-chat-api");
+const botcore = require("messenger-botcore");
 
 // Location of config directory (respects user settings)
 exports.getConfigDir = () => {
@@ -25,8 +26,8 @@ exports.loadConfig = () => {
     }
 }
 
-exports.saveConfig = config => {
-    fs.writeFile(exports.getConfigPath(), JSON.stringify(config), () => { });
+exports.saveConfig = (config, callback = () => { }) => {
+    fs.writeFile(exports.getConfigPath(), JSON.stringify(config), callback);
 }
 
 exports.printNoConfigError = () => {
@@ -89,6 +90,43 @@ exports.checkLogin = (fail, succeed) => {
     } catch {
         fail()
     }
+}
+
+exports.botcoreLogin = callback => {
+    const requiredVars = ["MEMCACHIER_USERNAME", "MEMCACHIER_SERVERS", "MEMCACHIER_PASSWORD"];
+    requiredVars.forEach(v => {
+        if (!process.env[v]) {
+            return callback(`Failed to access BotCore; make sure your required credentials [${requiredVars.join(", ")}]\
+are stored as environment variables: https://github.com/AstroCB/BotCore/blob/master/DOCS.md#credentialsobj`);
+        }
+    });
+
+    botcore.login.login(process.env, (err, api) => {
+        if (err) {
+            callback(`Error with login: ${err}`);
+        } else {
+            // Close out BotCore memcache connection to avoid hanging
+            const mem = botcore.login.getMemCache();
+            if (mem) {
+                mem.close();
+            }
+
+            let config;
+            try {
+                config = this.loadConfig();
+            } catch {
+                console.log(chalk.yellow(`Error loading config; even when logging in with BotCore,\
+you must still configure mnotify to set up the receiver's account.`));
+
+                // Call with no error anyway to passthrough to the default init that happens in start()
+                return callback(null);
+            }
+
+            // Update the login in the config
+            config.appState = api.getAppState();
+            this.saveConfig(config, callback);
+        }
+    });
 }
 
 // Stored options for common invocations
