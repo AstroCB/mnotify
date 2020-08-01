@@ -9,4 +9,4 @@ mnotify.init({
     } else {
         mnotify.notify("Test succeeded.");
     }
-})
+});
