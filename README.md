@@ -2,6 +2,7 @@ mnotify
 =======
 
 [![NPM](https://nodei.co/npm/mnotify.png)](https://npmjs.org/package/mnotify)
+
 ![Test mnotify](https://github.com/AstroCB/mnotify/workflows/Test%20mnotify/badge.svg)
 
 mnotify is a simple command-line utility for sending notifications through Facebook Messenger. It takes input from stdin and sends it to a pre-configured recipient (presumably, you). It's great for sending yourself build notifications, cron job alerts, or anything else that is worthy of a ping.
