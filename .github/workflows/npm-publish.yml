@@ -17,6 +17,11 @@ jobs:
           node-version: 12
       - run: npm ci
       - run: npm test
+        env:
+          MNOTIFY_RECEIVER_ID: ${{ secrets.MNOTIFY_RECEIVER_ID }}
+          MEMCACHIER_USERNAME: ${{ secrets.MEMCACHIER_USERNAME }}
+          MEMCACHIER_SERVERS:  ${{ secrets.MEMCACHIER_SERVERS  }}
+          MEMCACHIER_PASSWORD: ${{ secrets.MEMCACHIER_PASSWORD }}
 
   publish-npm:
     needs: build
