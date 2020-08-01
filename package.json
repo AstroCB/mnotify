@@ -7,7 +7,7 @@
     "mnotify": "src/mnotify.js"
   },
   "scripts": {
-    "test": "echo test | mnotify",
+    "test": "node test.js",
     "init": "mnotify --init",
     "help": "mnotify --help",
     "botcore": "mnotify --using-botcore",

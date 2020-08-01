@@ -115,11 +115,16 @@ are stored as environment variables: https://github.com/AstroCB/BotCore/blob/mas
             try {
                 config = this.loadConfig();
             } catch {
-                console.log(chalk.yellow(`Error loading config; even when logging in with BotCore,\
-you must still configure mnotify to set up the receiver's account.`));
-
-                // Call with no error anyway to passthrough to the default init that happens in start()
-                return callback(null);
+                if (process.env.MNOTIFY_RECEIVER_ID) {
+                    // Can bootstrap a config if receiver provided
+                    config = {
+                        "recipient": process.env.MNOTIFY_RECEIVER_ID,
+                    }
+                } else {
+                    return callback(chalk.yellow(`Error loading config; even \
+when logging in with BotCore, you must still configure mnotify to set up the \
+receiver's account. Alternatively, expose an MNOTIFY_RECEIVER_ID in your environment.`));
+                }
             }
 
             // Update the login in the config

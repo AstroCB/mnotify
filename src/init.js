@@ -1,10 +1,12 @@
 #! /usr/bin/env node
 
+// Stdlib
+const fs = require("fs");
+
 // Locals
 const tools = require("./tools");
 
 // Third party deps
-const fs = require("fs");
 const login = require("facebook-chat-api");
 const chalk = require("chalk");
 const rl = require("readline-sync");
@@ -118,16 +120,20 @@ exports.storePrefs = storePrefs;
 exports.askToStore = askToStore;
 
 exports.programmaticInit = (creds, callback) => {
-    storePrefs(creds.senderEmail,
-        creds.senderPass,
-        creds.receiverEmail,
-        creds.receiverPass,
-        creds.storeSenderCredentials,
-        getRecvApi,
-        (err, _) => {
-            callback(err);
-        }
-    );
+    if (creds.usingBotCore) {
+        tools.botcoreLogin(callback)
+    } else {
+        storePrefs(creds.senderEmail,
+            creds.senderPass,
+            creds.receiverEmail,
+            creds.receiverPass,
+            creds.storeSenderCredentials,
+            getRecvApi,
+            (err, _) => {
+                callback(err);
+            }
+        );
+    }
 };
 
 if (require.main === module) {
