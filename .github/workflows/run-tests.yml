@@ -24,7 +24,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - env:
+      env:
         MNOTIFY_RECEIVER_ID: ${{ secrets.MNOTIFY_RECEIVER_ID }}
         MEMCACHIER_USERNAME: ${{ secrets.MEMCACHIER_USERNAME }}
         MEMCACHIER_SERVERS:  ${{ secrets.MEMCACHIER_SERVERS  }}
