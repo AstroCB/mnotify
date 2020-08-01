@@ -10,16 +10,16 @@ exports.getConfigDir = () => {
 }
 
 exports.getConfigPath = () => {
-    return `${exports.getConfigDir()}/mnotify-config.json`;
+    return `${this.getConfigDir()}/mnotify-config.json`;
 }
 
 exports.configExists = () => {
-    return fs.existsSync(exports.getConfigDir());
+    return fs.existsSync(this.getConfigDir());
 }
 
 exports.loadConfig = () => {
-    if (exports.configExists()) {
-        const config = fs.readFileSync(exports.getConfigPath());
+    if (this.configExists()) {
+        const config = fs.readFileSync(this.getConfigPath());
         return JSON.parse(config);
     } else {
         throw Error("Config not found");
@@ -27,7 +27,7 @@ exports.loadConfig = () => {
 }
 
 exports.saveConfig = (config, callback = () => { }) => {
-    fs.writeFile(exports.getConfigPath(), JSON.stringify(config), callback);
+    fs.writeFile(this.getConfigPath(), JSON.stringify(config), callback);
 }
 
 exports.printNoConfigError = () => {
@@ -36,16 +36,16 @@ exports.printNoConfigError = () => {
 
 exports.updateLogin = (config, api) => {
     config.appState = api.getAppState();
-    exports.saveConfig(config);
+    this.saveConfig(config);
 }
 
 exports.updatePassword = pass => {
     try {
-        const config = exports.loadConfig();
+        const config = this.loadConfig();
         config.password = pass;
-        exports.saveConfig(config);
+        this.saveConfig(config);
     } catch {
-        exports.printNoConfigError();
+        this.printNoConfigError();
     }
 }
 
@@ -66,17 +66,17 @@ exports.getStdin = cb => {
 
 exports.checkLogin = (fail, succeed) => {
     try {
-        const config = exports.loadConfig();
-        login({ "appState": config.appState }, exports.silentOpt, (err, _) => {
+        const config = this.loadConfig();
+        login({ "appState": config.appState }, this.silentOpt, (err, _) => {
             if (err) {
                 if (config.email && config.password) {
                     login({ "email": config.email, "password": config.password },
-                        exports.silentOpt, (err, api) => {
+                        this.silentOpt, (err, api) => {
                             if (err) {
                                 fail()
                             } else {
                                 // Re-login succeeded; need to update stored session
-                                exports.updateLogin(config, api);
+                                this.updateLogin(config, api);
                                 succeed();
                             }
                         });
