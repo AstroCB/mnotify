@@ -96,7 +96,7 @@ exports.botcoreLogin = callback => {
     const requiredVars = ["MEMCACHIER_USERNAME", "MEMCACHIER_SERVERS", "MEMCACHIER_PASSWORD"];
     requiredVars.forEach(v => {
         if (!process.env[v]) {
-            return callback(`Failed to access BotCore; make sure your required credentials [${requiredVars.join(", ")}]\
+            return callback(`Failed to access BotCore; make sure your required credentials [${requiredVars.join(", ")}] \
 are stored as environment variables: https://github.com/AstroCB/BotCore/blob/master/DOCS.md#credentialsobj`);
         }
     });
