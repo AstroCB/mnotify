@@ -90,14 +90,10 @@ function storePrefs(sendEmail, sendPass, recvEmail, recvPass, shouldStore, recvA
                     config["password"] = sendPass;
                 }
 
-                const configPath = tools.getConfigDir();
-                if (!fs.existsSync(configPath)) {
-                    fs.mkdirSync(configPath);
-                }
-
                 console.log(`${chalk.green("Login successful.")} ${nameStr}Storing your session in ${chalk.yellow(tools.getConfigDir())}...`);
-                fs.writeFileSync(tools.getConfigPath(), JSON.stringify(config));
-                callback(null, sendApi);
+                tools.saveConfig(config, err => {
+                    callback(err, sendApi);
+                });
             });
         });
     });

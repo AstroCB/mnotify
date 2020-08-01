@@ -27,6 +27,11 @@ exports.loadConfig = () => {
 }
 
 exports.saveConfig = (config, callback = () => { }) => {
+    const configPath = this.getConfigDir();
+    if (!fs.existsSync(configPath)) {
+        fs.mkdirSync(configPath);
+    }
+
     fs.writeFile(this.getConfigPath(), JSON.stringify(config), callback);
 }
 
