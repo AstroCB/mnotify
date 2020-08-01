@@ -24,11 +24,11 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm test
       env:
         MNOTIFY_RECEIVER_ID: ${{ secrets.MNOTIFY_RECEIVER_ID }}
         MEMCACHIER_USERNAME: ${{ secrets.MEMCACHIER_USERNAME }}
         MEMCACHIER_SERVERS:  ${{ secrets.MEMCACHIER_SERVERS  }}
         MEMCACHIER_PASSWORD: ${{ secrets.MEMCACHIER_PASSWORD }}
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
